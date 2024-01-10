@@ -5,14 +5,17 @@ variables {
   department = "PlatformEng"
 }
 
+mock_provider "aws" {
+  source = "./tests"
 
-provider "aws" {
-  region = "us-east-2"
+  mock_resource "aws_s3_bucket" {
+    defaults = {
+      bucket = "tftest-hashicafe-website-test-111111111"
+    }
+  }
 }
 
 run "unit_test" {
-  command = plan
-
   assert {
     condition     = aws_s3_bucket.www_bucket.bucket_prefix == "tftest-hashicafe-website-test-"
     error_message = "S3 bucket prefix does not match expected value."
@@ -54,27 +57,8 @@ run "prefix_length" {
 }
 
 run "create_bucket" {
-  command = apply
-
   assert {
     condition     = startswith(aws_s3_bucket.www_bucket.bucket, "tftest-hashicafe-website-test-")
     error_message = "The bucket name does not start with the expected prefix."
-  }
-}
-
-run "website_is_running" {
-  command = plan
-
-  module {
-    source = "./tests/http-validate"
-  }
-
-  variables {
-    endpoint = run.create_bucket.endpoint
-  }
-
-  assert {
-    condition     = data.http.index.status_code == 200
-    error_message = "Website responded with HTTP status ${data.http.index.status_code}"
   }
 }

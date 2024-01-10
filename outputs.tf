@@ -7,3 +7,7 @@ output "product" {
   description = "The product which was randomly selected."
   value       = local.hashi_products[random_integer.product.result].name
 }
+
+output "cloudfront_url" {
+  value = "https://${aws_cloudfront_distribution.s3_distribution.domain_name}"
+}
