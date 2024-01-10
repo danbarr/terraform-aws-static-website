@@ -68,7 +68,7 @@ run "create_bucket" {
   }
 
   assert {
-    condition = aws_cloudfront_distribution.s3_distribution.domain_name == "testwebsite.example.com"
+    condition     = aws_cloudfront_distribution.s3_distribution.domain_name == "testwebsite.example.com"
     error_message = "The CloudFront domain name does not match the expected value."
   }
 }
