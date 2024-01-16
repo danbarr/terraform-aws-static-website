@@ -2,9 +2,8 @@ variables {
   prefix     = "tftest"
   region     = "us-east-2"
   env        = "test"
-  department = "PlatformEng"
+  department = "test"
 }
-
 
 provider "aws" {
   region = "us-east-2"
